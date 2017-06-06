@@ -40,6 +40,15 @@ function resposta=expansao(vetor, fator)
     end
 endfunction
 
+function resposta=compressao(vetor, fator)
+    comprimento = length(vetor);
+    resposta = zeros(1, comprimento/fator);
+    resposta(1,1) = vetor(1,1);
+    for i= 1:length(vetor)-1
+        resposta(1,i+1) = vetor(1,(fator*i+1));
+    end
+endfunction
+
 function resposta=interpolar(vetor, nucleo)
     limite = round(((length(nucleo)-0.1))/2)
     resposta = vetor
@@ -61,20 +70,20 @@ t2 = 0:length(s2)-1
 con = convolucao(s1,s2)
 tt = 0:length(con)-1
 
-subplot(231);
+subplot(331);
 title("Sinal 1");
 xlabel("Tempo");
 ylabel("y(tempo)");    
 plot(t1, s1, '--ob');
 
 
-subplot(232);
+subplot(332);
 title("Sinal 1");
 xlabel("Tempo");
 ylabel("y(tempo)");    
 plot(t2, s2, '--og');
 
-subplot(233);
+subplot(333);
 title("S1 * S2");
 xlabel("Tempo");
 ylabel("y(tempo)");    
@@ -87,7 +96,7 @@ s1 = [1 0 2 3 4 5 6 7 6 5 4 2 1 3 4 5];
 t1 = 0:length(s1)-1; 
 
 
-subplot(234);
+subplot(334);
 title("Sinal incial");
 xlabel("Tempo");
 ylabel("y(tempo)");
@@ -95,7 +104,7 @@ plot2d3(t1,s1);
 plot(t1,s1, '.');
 sleep(1000);
 
-subplot(235);
+subplot(335);
 s2 = expansao(s1, fator);
 t2 = 0:length(s2)-1;
 title("Sinal expandido com fator: " + string(fator));
@@ -106,7 +115,7 @@ plot(t2,s2, 'g.');
 
 sleep(1000);
 
-subplot(236)
+subplot(336)
 title("Sinal expandido (com fator " + string(fator) + ") Interopolado");
 xlabel("Tempo");
 ylabel("y(tempo)");
@@ -127,4 +136,4 @@ for i = 2:(length(t2)-fator+1)
 end
 
 
-
+z = compressao([10 9 8 7 6 5 4 3 2 1])
