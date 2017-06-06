@@ -6,6 +6,31 @@ function resposta=reverter(vetor)
     end
 endfunction
 
+function resposta=convolucao(x, y)
+    resposta = zeros(1,length(x) + length(y) - 1);
+    matriz = zeros(length(x), 2*length(y))
+    for linha = 1:length(x)
+        for coluna = 1:length(y)
+            matriz(linha, coluna+linha-1) = y(1,coluna)
+        end
+    end
+    resposta = x * matriz;
+endfunction
+
+function resposta=getKernel(fator, tipo)
+    if tipo == "t"  then
+        nucleo = zeros(1, 2*fator+1)
+        denominador = 1/fator
+        for i = 0:fator+1
+            nucleo(1,i+1) = i * denominador 
+        end
+        for i = 1:fator
+            nucleo(1,length(nucleo)+1-i) = nucleo(1,i) 
+        end
+    end
+    resposta = nucleo
+endfunction
+
 function resposta=expansao(vetor, fator)
     comprimento = length(vetor);
     resposta = zeros(1, fator*comprimento);
@@ -21,39 +46,48 @@ function resposta=interpolar(vetor, nucleo)
     convolucao = conv(vetor, nucleo);
     resposta = convolucao(limite+1:length(convolucao)-limite);
 endfunction
-//                           1 2 3 4 5 6 7
-//                             3 4 5 8 7 6 4
-function resposta=convolucao(vetor1,vetor2)
-    comprimento1 = length(vetor1)
-    comprimento2 = length(vetor2)
-    comprimento = comprimento1 + comprimento2
-    soma = 0
-    resposta = zeros(1, comprimento)
-    vetor2Invertido = reverter(v2);
-    for i = 1:comprimento/2
-        for j = 1:i
-            if j <= comprimento1 then
-                if j<= comprimento2 then
-                    soma = soma + (vetor1(j)*vetor2Invertido(comprimento2+j-i))
-                end
-            end
-        end
-        resposta(1,i) = soma
-        soma = 0
-    end
-endfunction
+
 
 clf();
-titlepage("Q1 e Q2 - Expansão e interpolação de sinais ");
-sleep(2500);
+titlepage("Expansão e interpolação de sinais ");
+sleep(1500);
 clf();
 
+// Questao 1
+s1 = [9 4 6 7 8 6 5 2 3 4 5 2 3 4 1 3 4]
+t1 = 0:length(s1)-1
+s2 = [7 4 6 2 1 2 4 5]
+t2 = 0:length(s2)-1
+con = convolucao(s1,s2)
+tt = 0:length(con)-1
+
+subplot(231);
+title("Sinal 1");
+xlabel("Tempo");
+ylabel("y(tempo)");    
+plot(t1, s1, '--ob');
+
+
+subplot(232);
+title("Sinal 1");
+xlabel("Tempo");
+ylabel("y(tempo)");    
+plot(t2, s2, '--og');
+
+subplot(233);
+title("S1 * S2");
+xlabel("Tempo");
+ylabel("y(tempo)");    
+plot(tt, con, '--or');
+
+// Questoes 2 e 3
 fator = 3
-nucleo = [1 1 1]
+nucleo = getKernel(3, "t")
 s1 = [1 0 2 3 4 5 6 7 6 5 4 2 1 3 4 5];
 t1 = 0:length(s1)-1; 
 
-subplot(131);
+
+subplot(234);
 title("Sinal incial");
 xlabel("Tempo");
 ylabel("y(tempo)");
@@ -61,28 +95,18 @@ plot2d3(t1,s1);
 plot(t1,s1, '.');
 sleep(1000);
 
-subplot(132);
+subplot(235);
 s2 = expansao(s1, fator);
 t2 = 0:length(s2)-1;
 title("Sinal expandido com fator: " + string(fator));
 xlabel("Tempo");
 ylabel("y(tempo)");    
 plot2d3(t2,s2);
-plot(t2,s2, 'r.');
+plot(t2,s2, 'g.');
 
 sleep(1000);
 
-subplot(133);
-aproximado = interpolar(s2, nucleo);
-title("Sinal expandido (com fator " + string(fator) + ") interpolado");
-xlabel("Tempo");
-ylabel("y(tempo)");
-plot2d3(t2,aproximado);
-plot(t2,aproximado, 'r.');
-
-sleep(5000);
-
-clf();
+subplot(236)
 title("Sinal expandido (com fator " + string(fator) + ") Interopolado");
 xlabel("Tempo");
 ylabel("y(tempo)");
