@@ -62,7 +62,7 @@ titlepage("Decimação, Expansão e interpolação de sinais ");
 sleep(1500);
 clf();
 
-// Questao 1
+//  ---------- Questao 1 --------------
 s1 = [9 4 6 7 8 6 5 2 3 4 5 2 3 4 1 3 4]
 t1 = 0:length(s1)-1
 s2 = [7 4 6 2 1 2 4 5]
@@ -96,8 +96,8 @@ sleep(1000);
 
 
 
-// Questoes 2, 3 e 4
-fator = 3
+// --------- Questoes 2, 3 e 4 -----------
+fator = 4
 nucleo = getKernel(fator, "t")
 s = [1 3 5 7 9 11 13 15 17 19 21 23 25 27 29 31];
 t = 0:length(s)-1; 
